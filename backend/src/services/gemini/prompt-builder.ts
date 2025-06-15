@@ -22,8 +22,18 @@ CRITICAL INSTRUCTIONS:
 5. Provide confidence scores for each field (0.0 to 1.0)
 
 ${context?.product_catalog_sample ? 
-  `AVAILABLE PRODUCTS (sample): ${JSON.stringify(context.product_catalog_sample.slice(0, 20))}` : 
-  'No product catalog provided'
+  `PRODUCT CATALOG (Match items to these SKUs):
+${context.product_catalog_sample.slice(0, 30).map(p => 
+  `- ${p.product_code}: ${p.product_name} ($${p.price}) - ${p.description}`
+).join('\n')}
+
+IMPORTANT: When matching products:
+1. Look for exact SKU codes in the email (e.g., "DSK-0001")
+2. Match product names to descriptions (e.g., "office desk" → "DSK-0001")
+3. Use fuzzy matching for similar terms (e.g., "chair" → "CHR-xxxx")
+4. If uncertain, prefer the closest match with lower confidence
+5. Set sku to null only if no reasonable match exists` : 
+  'No product catalog provided - cannot match SKUs'
 }
 
 OUTPUT FORMAT - Return ONLY valid JSON:

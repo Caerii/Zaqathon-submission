@@ -207,6 +207,14 @@ export class ProductCatalogService {
   }
 
   /**
+   * Get all products (for AI context)
+   */
+  async getAllProducts(): Promise<Product[]> {
+    await this.ensureLoaded();
+    return [...this.products]; // Return a copy
+  }
+
+  /**
    * Get catalog statistics
    */
   getStats() {
